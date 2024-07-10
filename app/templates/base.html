@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {% if title %}
+            <title>{{ title }} - Gerlinger</title>
+        {% else %}
+            <title> Gerlinger </title>
+        {% endif %}
+        <link href={{ url_for("static", filename="bootstrap/bootstrap.min.css") }} rel="stylesheet"> 
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for("static", filename="favicons/apple-touch-icon.png") }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for("static", filename="favicons/favicon-32x32.png") }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for("static", filename="favicons/favicon-16x16.png") }}">
+        <link rel="manifest" href="{{ url_for("static", filename="favicons/site.webmanifest") }}">
+    </head>
+    <body>
+      <header class="p-3 text-bg-dark">
+        <div class="container">
+          <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="{{ url_for("core.index") }}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none fs-4 px-3">
+              <span class="border rounded px-2">Gerlinger</span>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+              <li><a href="{{ url_for("core.calculators") }}" class="nav-link px-2 text-white">Калькуляторы</a></li>
+              <li><a class="nav-link text-secondary disabled" aria-disabled="true">База знаний</a></li>
+            </ul>
+
+            <div class="text-end">
+              <a href="https://github.com/fine-line/gerlinger" class="text-body-secondary px-2">
+                <svg class="bi" width="25" height="25" fill="white" role="img"><use xlink:href="/static/bootstrap/icons/bootstrap-icons.svg#github"/></svg>
+              </a>
+              <a href="https://discord.gg/fybnx5PDBV" class="text-body-secondary px-2">
+                <svg class="bi" width="25" height="25" fill="white" role="img"><use xlink:href="/static/bootstrap/icons/bootstrap-icons.svg#discord"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+        {% block content %}{% endblock %}
+        <script src={{ url_for("static", filename="bootstrap/bootstrap.bundle.min.js") }} type="text/javascript"></script> 
+    </body>
+</html>

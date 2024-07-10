@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="py-3 text-center">
+        <h3>Расчет нормативного значения изменений температур при замыкании конструкций</h3>
+        <h4>СП 20.13330.2016 (изм.5) СП 131.13330.2020 (изм.2)</h4>
+    </div>
+        <form action="" method="post" novalidate>
+            <div class="container row g-3">
+                {{ form.hidden_tag() }}
+                <!-- Левый столбец -->
+                <div class="col-md-6 col-lg-5">
+                    <!-- Тип здания -->
+                    <div class="row g-1 border p-3 my-2 rounded">
+                        <h5>{{ form.internal_climate_type.label(class="form-label") }}</h5>
+                        {% for subfield in form.internal_climate_type %}
+                            <div class="form-check">
+                                {{ subfield(class="form-check-input") }}
+                                {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Тип конструкций -->
+                    <div class="row g-1 border p-3 my-2 rounded">
+                        <h5>{{ form.solar_protected.label(class="form-label") }}</h5>
+                        {% for subfield in form.solar_protected %}
+                            <div class="form-check">
+                                {{ subfield(class="form-check-input") }}
+                                {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Температура внутреннего воздуха в холодное время года (по ТЗ) -->
+                    <div class="row g-1 border p-3 my-2 rounded" id="t_ic_div" hidden>
+                        <h5>{{ form.t_ic.label(class="form-label") }}</h5>
+                        {{ form.t_ic(class="form-control", placeholder="Введите значение в градусах") }}<br>
+                        {% for error in form.t_ic.errors %}
+                            <span style="color: red";>[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+                    <!-- Температура внутреннего воздуха в теплое время года (по ТЗ) -->
+                    <div class="row g-1 border p-3 my-2 rounded" id="t_iw_div" hidden>
+                        <h5>{{ form.t_iw.label(class="form-label") }}</h5>
+                        {{ form.t_iw(class="form-control", placeholder="Введите значение в градусах") }}<br>
+                        {% for error in form.t_iw.errors %}
+                            <span style="color: red";>[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+                    <!-- Материал конструкций -->
+                    <div class="row g-1 border p-3 my-2 rounded" id="structure_type_div" hidden>
+                        <h5>{{ form.structure_type.label(class="form-label") }}</h5>
+                        {% for subfield in form.structure_type %}
+                            <div class="form-check">
+                                {{ subfield(class="form-check-input") }}
+                                {{ subfield.label(class="form-check-label") }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <!-- Коэффициент поглощения солнечной радиации -->
+                    <div class="row g-1 border p-3 my-2 rounded" id="ro_div" hidden>
+                        <h5>{{ form.select_ro.label(class="form-label") }}</h5>
+                        {{ form.select_ro(class="form-select") }}<br>
+                        <h6>{{ form.input_ro.label(class="form-label my-2") }}</h6>
+                        {{ form.input_ro(class="form-control", readOnly=True) }}<br>
+                        {% for error in form.input_ro.errors %}
+                            <span style="color: red";>[{{ error }}]</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- Правый столбец -->
+                <div class="col-md-6 col-lg-7">
+                    <div class="row g-1 border p-3 my-2 rounded">
+                        <h5>Географическое расположение</h5>
+                        <p>Введите координаты или укажите точку на карте</p>
+                        <div class="col-md-6 col-lg-6">
+                            {{ form.latitude.label(class="form-label") }}<br>
+                            {{ form.latitude(id="latitude", class="form-control", placeholder="55,7538") }}
+                            {% for error in form.latitude.errors %}
+                                <span style="color: red";>[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            {{ form.longitude.label(class="form-label") }}<br>
+                            {{ form.longitude(id="longitude", class="form-control", placeholder="37,6202") }}
+                            {% for error in form.longitude.errors %}
+                                <span style="color: red";>[{{ error }}]</span>
+                            {% endfor %}
+                        </div>
+                        {% for error in form.submit.errors %}
+                        <span style="color: red";>[{{ error }}]</span>
+                        {% endfor %}
+                        <div class="embed-responsive py-3">
+                            {{ map_iframe|safe }}
+                        </div>
+                        <!-- Рассчитать -->
+                        {{ form.submit(class="w-100 btn btn-primary btn-lg") }}<br>
+                    </div>
+                </div>
+            </div>
+        </form>
+</div>
+
+<script>
+
+    function hideElem(id) {
+        document.getElementById(id).hidden = true;
+    }
+
+    function showElem(id) {
+        document.getElementById(id).hidden = false;
+    }
+
+    if (document.getElementById("internal_climate_type-0").checked === true){
+        hideElem("t_iw_div");
+        hideElem("t_ic_div");
+    } else if (document.getElementById("internal_climate_type-1").checked === true){
+        hideElem("t_iw_div");
+        showElem("t_ic_div");
+    } else {
+        showElem("t_iw_div");
+        showElem("t_ic_div");
+    }
+
+    document.getElementById("internal_climate_type-0").addEventListener("click", function(){
+        hideElem("t_iw_div");
+        hideElem("t_ic_div");
+    });
+
+    document.getElementById("internal_climate_type-1").addEventListener("click", function(){
+        hideElem("t_iw_div");
+        showElem("t_ic_div");
+    });
+
+    document.getElementById("internal_climate_type-2").addEventListener("click", function(){
+        showElem("t_iw_div");
+        showElem("t_ic_div");
+    });
+
+    if (document.getElementById("solar_protected-0").checked === true){
+        hideElem("structure_type_div");
+        hideElem("ro_div");
+    } else {
+        showElem("structure_type_div");
+        showElem("ro_div");
+    }
+
+    document.getElementById("solar_protected-0").addEventListener("click", function(){
+        hideElem("structure_type_div");
+        hideElem("ro_div");
+    });
+
+    document.getElementById("solar_protected-1").addEventListener("click", function(){
+        showElem("structure_type_div");
+        showElem("ro_div");
+    });
+
+    document.getElementById("input_ro").value = document.getElementById("select_ro").value;
+
+    document.getElementById("select_ro").addEventListener("change", function(){
+        
+        if (document.getElementById("select_ro").value === "None"){
+            document.getElementById("input_ro").readOnly = false;
+            document.getElementById("input_ro").value = "";
+            document.getElementById("input_ro").placeholder = "Введите значение";
+        } else {
+            document.getElementById("input_ro").value = document.getElementById("select_ro").value;
+        }
+    });
+
+</script>
+
+{% endblock content %}

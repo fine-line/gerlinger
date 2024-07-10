@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="py-3 text-center">
+        <h3>Расчет нормативного значения изменений температур при замыкании конструкций</h3>
+        <h4>СП 20.13330.2016 (изм.5) СП 131.13330.2020 (изм.2)</h4>
+    </div>
+    <div>
+        <h4>Результаты расчета</h4>
+        <hr class="my-2">
+        {% if solar_protected %}
+            <ul class="list-unstyled">
+                <li class="fw-bold">Нормативное значение изменений температур при замыкании конструкции: в холодное время года Δt<sub>с</sub> = {{ delta_t["delta_t_c"]|round(1) }} ℃</li>
+                <li class="fw-bold">Нормативное значение изменений температур при замыкании конструкции: в теплое время года Δt<sub>w</sub> = {{ delta_t["delta_t_w"]|round(1) }} ℃</li>
+            </ul>
+        {% else %}
+            <ul class="list-unstyled">
+                <li class="fw-bold">Нормативное значение изменений температур при замыкании конструкции: в холодное время года Δt<sub>с</sub></li>
+                <li class="fw-bold">Нормативное значение изменений температур при замыкании конструкции: в теплое время года Δt<sub>w</sub></li>
+            </ul>
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col col-lg-2">
+                    </div>
+                    <div class="col-4">
+                        <ul class="list-unstyled">
+                            <li>Северная ориентация</li>
+                            <li>Δt<sub>с</sub> = {{ delta_t["north"]["delta_t_c"]|round(1) }} ℃</li>
+                            <li>Δt<sub>w</sub> = {{ delta_t["north"]["delta_t_w"]|round(1) }} ℃</li>
+                        </ul>
+                    </div>
+                    <div class="col col-lg-2">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-lg-2">
+                        <ul class="list-unstyled">
+                            <li>Восточная ориентация</li>
+                            <li>Δt<sub>с</sub> = {{ delta_t["west_east"]["delta_t_c"]|round(1) }} ℃</li>
+                            <li>Δt<sub>w</sub> = {{ delta_t["west_east"]["delta_t_w"]|round(1) }} ℃</li>
+                        </ul>
+                    </div>
+                    <div class="col-4 border border-black border-4">
+                        <ul class="list-unstyled">
+                            <li>Горизонтальная ориентация</li>
+                            <li>Δt<sub>с</sub> = {{ delta_t["horizontal"]["delta_t_c"]|round(1) }} ℃</li>
+                            <li>Δt<sub>w</sub> = {{ delta_t["horizontal"]["delta_t_w"]|round(1) }} ℃</li>
+                        </ul>
+                    </div>
+                    <div class="col col-lg-2">
+                        <ul class="list-unstyled">
+                            <li>Западная ориентация</li>
+                            <li>Δt<sub>с</sub> = {{ delta_t["west_east"]["delta_t_c"]|round(1) }} ℃</li>
+                            <li>Δt<sub>w</sub> = {{ delta_t["west_east"]["delta_t_w"]|round(1) }} ℃</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-lg-2">
+                    </div>
+                    <div class="col-4">
+                        <ul class="list-unstyled">
+                            <li>Южная ориентация</li>
+                            <li>Δt<sub>с</sub> = {{ delta_t["south"]["delta_t_c"]|round(1) }} ℃</li>
+                            <li>Δt<sub>w</sub> = {{ delta_t["south"]["delta_t_w"]|round(1) }} ℃</li>
+                        </ul>
+                    </div>
+                    <div class="col col-lg-2">
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <div>
+        <h4>Исходные данные</h4>
+        <hr class="my-2">
+        <h5>Тип здания</h5>
+        {% if internal_climate_type  == "unheated" %}
+            <p>Неотапливаемые здания и открытые сооружения</p>
+        {% elif internal_climate_type == "heated"  %}
+            <ul class="list-unstyled">
+                <li>Отапливаемые здания</li>
+                <li>Температура внутреннего воздуха помещений в холодное время года: t<sub>ic</sub> = {{ internal_temperatures["t_ic"] }} ℃</li>
+            </ul>
+        {% else %}
+            <ul class="list-unstyled">
+                <li>Здания с искусственным климатом</li>
+                <li>Температура внутреннего воздуха помещений в холодное время года: t<sub>ic</sub> = {{ internal_temperatures["t_ic"] }} ℃</li>
+                <li>Температура внутреннего воздуха помещений в теплое время года: t<sub>iw</sub> = {{ internal_temperatures["t_iw"] }} ℃</li>
+            </ul>
+        {% endif %}
+        <h5>Тип конструкций</h5>
+        {% if solar_protected %}
+            <p>Защищиенные от воздействия солнечной радиации</p>
+        {% else %}
+            <ul class="list-unstyled">
+                <li>Не защищиенные от воздействия солнечной радиации</li>
+                <li>Материал конструкций: {{ structure_type }}</li>
+                <li>Коэффициент поглощения солнечной радиации: ρ = {{ ro }}</li>
+            </ul>
+        {% endif %}
+        </ul>
+        <h5>Географическое расположение</h5>
+        <p>Широта: {{ latitude }}, Долгота: {{ longitude }}</p>
+        <div class="embed-responsive my-3 overflow-hidden">
+            {{ map_iframe|safe }}
+        </div>
+        <h5>Величины нормативных значений температур в данной точке</h5>
+        <ul class="list-unstyled">
+            <li>Нормативное значение минимальной температуры воздуха (карта 4 СП 20): t<sub>min</sub> = {{ sp_map_temperatures["t_min"]|round(1) }} ℃</li>
+            <li>Нормативное значение максимальной температуры воздуха (карта 5 СП 20): t<sub>max</sub> = {{ sp_map_temperatures["t_max"]|round(1) }} ℃</li>
+            <li>Средняя суточная амплитуда температуры воздуха наиболее холодного месяца (таблица 3.1 СП 131): A<sub>I</sub> = {{ sp_map_temperatures["A_i"] }} ℃</li>
+            <li>Средняя суточная амплитуда температуры воздуха наиболее теплого месяца (таблица 4.1 СП 131): A<sub>VII</sub> = {{ sp_map_temperatures["A_vii"] }} ℃</li>
+            <li>Многолетняя средняя месячная температура воздуха в январе (таблица 5.1 СП 131): t<sub>I</sub> = {{ sp_map_temperatures["t_i"] }} ℃</li>
+            <li>Многолетняя средняя месячная температура воздуха в июле (таблица 5.1 СП 131): t<sub>VII</sub> = {{ sp_map_temperatures["t_vii"] }} ℃</li>
+      </div>
+    <div>
+        <h4>Промежуточные результаты</h4>
+        <hr class="my-2">
+        {% if solar_protected %}
+            <ul class="list-unstyled">
+                <li>Средняя суточная температура наружного воздуха в холодное время года: t<sub>ec</sub> = {{ t_c_and_t_w["t_ec"]|round(1) }} ℃</li>
+                <li>Средняя суточная температура наружного воздуха в теплое время года: t<sub>ew</sub> = {{ t_c_and_t_w["t_ew"]|round(1) }} ℃</li>
+                <li>Нормативное значение температуры для холодного времени года: t<sub>c</sub> = {{ t_c_and_t_w["t_c"]|round(1) }} ℃</li>
+                <li>Нормативное значение температуры для теплого времени года: t<sub>w</sub> = {{ t_c_and_t_w["t_w"]|round(1) }} ℃</li>
+                <li>Начальная температура, соответствующая замыканию конструкции в холодное время года: t<sub>0c</sub> = {{ delta_t["t_0c"]|round(1) }} ℃</li>
+                <li>Начальная температура, соответствующая замыканию конструкции в теплое время года: t<sub>0w</sub> = {{ delta_t["t_0w"]|round(1) }} ℃</li>
+            </ul>
+        {% else %}
+            <ul class="list-unstyled">
+                <li>Средняя суточная температура наружного воздуха в холодное время года: t<sub>ec</sub> = {{ t_c_and_t_w["horizontal"]["t_ec"]|round(1) }} ℃</li>
+                <li>Средняя суточная температура наружного воздуха в теплое время года: t<sub>ew</sub> = {{ t_c_and_t_w["horizontal"]["t_ew"]|round(1) }} ℃</li>
+                <li>Нормативное значение температуры для холодного времени года: t<sub>c</sub> = {{ t_c_and_t_w["horizontal"]["t_c"]|round(1) }} ℃</li>
+                <li>Нормативное значение температуры для теплого времени года:</li>
+                {% for orientation in orientations %}
+                    <li>t<sub>w_{{ orientation }}</sub> = {{ t_c_and_t_w[orientation]["t_w"]|round(1) }} ℃</li>
+                {% endfor %}
+                <li>Начальная температура, соответствующая замыканию конструкции в холодное время года: t<sub>0c</sub> = {{ delta_t["horizontal"]["t_0c"]|round(1) }} ℃</li>
+                <li>Начальная температура, соответствующая замыканию конструкции в теплое время года: t<sub>0w</sub> = {{ delta_t["horizontal"]["t_0w"]|round(1) }} ℃</li>
+            </ul>
+        {% endif %}
+    </div>
+    <div class="mb-5">
+        <a class="btn btn-secondary" href="{{ url_for("temperature_difference.index") }}" role="button">Рассчитать с другими исходными данными</a>
+    </div>
+</div>
+
+
+{% endblock content %}

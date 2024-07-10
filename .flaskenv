@@ -1,0 +1,2 @@
+FLASK_APP=gerlinger.py
+FLASK_DEBUG=1

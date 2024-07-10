@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="px-4 py-3 my-2 text-center">
+  <h1 class="display-6 fw-bold text-body-emphasis">Калькуляторы</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">Прикладные расчетные программы</p>
+  </div>
+</div>
+<div class="container px-4 py-3">
+  <div class="row g-4 py-5 row-cols-1 row-cols-lg-2 justify-content-md-center">
+    <div class="col col-lg-4 d-flex align-items-start justify-content-md-center">
+      <div class="icon-square text-body-emphasis d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+        <svg class="bi" width="1.2em" height="1.2em"><use xlink:href="/static/bootstrap/icons/bootstrap-icons.svg#wind"/></svg>
+      </div>
+      <div>
+        <h4 class="text-body-emphasis">Нагрузки и воздействия</h4>
+        <ul class="list-group list-group-flush list-group-my-3">
+          <li class="list-group-item">
+            <a class="icon-link link-primary link-underline-opacity-0" href="{{ url_for("temperature_difference.index") }}">
+            <svg class="bi" width="16" height="16"><use xlink:href="/static/bootstrap/icons/bootstrap-icons.svg#thermometer"/></svg>
+              Расчет температурной нагрузки
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col col-lg-4 d-flex align-items-start justify-content-md-center">
+      <div class="icon-square text-body-emphasis d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+        <svg class="bi" width="1.2em" height="1.2em"><use xlink:href="/static/bootstrap/icons/bootstrap-icons.svg#building-gear"/></svg>
+      </div>
+      <div>
+        <h4 class="text-body-emphasis">Материалы</h4>
+        <h5 class="text-body-emphasis">Стальные конструкции</h5>
+        <p>Coming soon</p>
+      </div>
+    </div>
+    <div class="col col-lg-4 d-flex align-items-start justify-content-md-center">
+      <div class="icon-square text-body-emphasis d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+          <svg class="bi" width="1.2em" height="1.2em"><use xlink:href="/static/bootstrap/icons/bootstrap-icons.svg#calculator"/></svg>
+      </div>
+      <div>
+        <h4 class="text-body-emphasis">Несущая способность</h4>
+        <h5 class="text-body-emphasis">Стальные конструкции</h5>
+        <p>Coming soon</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

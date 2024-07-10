@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="px-4 py-3 my-5 text-center">
+  <h1 class="display-5 fw-bold text-body-emphasis">Gerlinger</h1>
+  <div class="col-lg-6 mx-auto">
+    <p class="lead mb-4">Бесплатный open-sorce проект для инженеров-конструкторов ПГС</p>
+  </div>
+</div>
+<div class="container px-4 py-3">
+  <div class="row g-4 py-5 row-cols-1 row-cols-lg-2 justify-content-md-center">
+    <div class="col col-lg-4 d-flex align-items-start justify-content-md-center">
+      <div class="icon-square text-body-emphasis d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+        <svg class="bi" width="1.5em" height="1.5em"><use xlink:href="/static/bootstrap/icons/bootstrap-icons.svg#cpu"/></svg>
+      </div>
+      <div>
+        <h3 class="fs-2 text-body-emphasis">Калькуляторы</h3>
+        <p>Набор прикладных расчетных программ</p>
+        <a href="{{ url_for("core.calculators") }}" class="btn btn-primary">
+          Перейти в галерею
+        </a>
+      </div>
+    </div>
+    <div class="col col-lg-4 d-flex align-items-start justify-content-md-center">
+      <div class="icon-square text-body-emphasis d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+        <svg class="bi" width="1.5em" height="1.5em"><use xlink:href="/static/bootstrap/icons/bootstrap-icons.svg#book"/></svg>
+      </div>
+      <div>
+        <h3 class="fs-2 text-body-emphasis">База знаний</h3>
+        <p>Wiki Gerlinger</p>
+        <a href="#" class="btn btn-secondary disabled">
+          Coming soon
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
