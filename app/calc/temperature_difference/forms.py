@@ -45,7 +45,7 @@ class TemperatureDifferenceForm(FlaskForm):
     solar_protected = RadioField(
         "Тип конструкций",
         choices=[
-            (True, "Защищиенные от воздействия солнечной радиации"),
+            (True, "Защищенные от воздействия солнечной радиации"),
             (False, "Не защищенные от воздействия солнечной радиации")
             ],
         coerce=coerce_bool,
